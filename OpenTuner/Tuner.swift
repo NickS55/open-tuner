@@ -28,6 +28,9 @@ final class Tuner: ObservableObject {
     @MainActor
     func start() async {
         guard !isRunning else { return }
+        // App Store screenshots: the simulator has no microphone, so fake a reading.
+        let demo = UserDefaults.standard.double(forKey: "demoFrequency")
+        if demo > 0 { frequency = demo; return }
         guard await AVAudioApplication.requestRecordPermission() else {
             permissionDenied = true
             return
