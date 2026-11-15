@@ -6,12 +6,8 @@ struct TunerView: View {
 
     private var inTune: Bool { abs(tuner.cents ?? 99) <= 5 }
     private var accent: Color {
-        guard let cents = tuner.cents else { return .secondary }
-        switch abs(cents) {
-        case ...5: return .green
-        case ...15: return .yellow
-        default: return .orange
-        }
+        guard tuner.cents != nil else { return .sky }
+        return inTune ? .bird : .rust
     }
 
     var body: some View {
@@ -39,7 +35,7 @@ struct TunerView: View {
             VStack(spacing: 4) {
                 Text(tuner.cents.map { String(format: "%+.0f cents", $0) } ?? "Play a string")
                     .font(.title3.monospacedDigit())
-                    .foregroundStyle(inTune ? .green : .primary)
+                    .foregroundStyle(inTune ? Color.bird : Color.ink)
                 Text(tuner.frequency.map { String(format: "%.1f Hz", $0) } ?? " ")
                     .font(.subheadline.monospacedDigit())
                     .foregroundStyle(.secondary)
@@ -50,7 +46,7 @@ struct TunerView: View {
             if tuner.permissionDenied {
                 Text("Microphone access is off. Enable it in Settings › Open Tuner.")
                     .font(.footnote)
-                    .foregroundStyle(.red)
+                    .foregroundStyle(Color.rust)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal)
             }
@@ -61,6 +57,10 @@ struct TunerView: View {
             .padding(.horizontal, 32)
             .padding(.bottom, 24)
         }
+        .frame(maxWidth: .infinity)
+        .background(Color.ground)
+        .toolbarBackground(Color.ground, for: .tabBar)
+        .toolbarBackground(.visible, for: .tabBar)
         .task { await tuner.start() }
         .onDisappear { tuner.stop() }
         .onChange(of: scenePhase) { _, phase in
@@ -81,7 +81,7 @@ private struct CentsGauge: View {
                 ForEach(-10...10, id: \.self) { i in
                     let major = i % 5 == 0
                     Rectangle()
-                        .fill(i == 0 ? Color.green : Color.white.opacity(major ? 0.5 : 0.2))
+                        .fill(i == 0 ? Color.rust : Color.sky.opacity(major ? 1 : 0.6))
                         .frame(width: i == 0 ? 3 : 2, height: major ? h * 0.6 : h * 0.35)
                         .position(x: w / 2 + CGFloat(i) / 10 * (w / 2 - 6), y: h / 2)
                 }

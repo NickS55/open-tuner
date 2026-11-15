@@ -23,7 +23,9 @@ struct OpenTunerApp: App {
                     .tabItem { Label("Metronome", systemImage: "metronome") }
                     .tag(1)
             }
-            .preferredColorScheme(.dark)
+            .tint(.bird)
+            .foregroundStyle(Color.ink)
+            .preferredColorScheme(.light)
         }
     }
 }

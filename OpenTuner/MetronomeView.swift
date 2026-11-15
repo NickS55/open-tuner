@@ -12,7 +12,7 @@ struct MetronomeView: View {
                 HStack(spacing: 14) {
                     ForEach(0..<metronome.beatsPerBar, id: \.self) { i in
                         Circle()
-                            .fill(i == beat ? (i == 0 ? Color.orange : Color.green) : Color.white.opacity(0.12))
+                            .fill(i == beat ? (i == 0 ? Color.rust : Color.bird) : Color.sky.opacity(0.45))
                             .frame(width: i == 0 ? 30 : 24, height: i == 0 ? 30 : 24)
                     }
                 }
@@ -47,19 +47,23 @@ struct MetronomeView: View {
                 Button("Tap") { metronome.tap() }
                     .font(.title3.bold())
                     .frame(width: 110, height: 64)
-                    .background(Capsule().fill(Color.white.opacity(0.12)))
+                    .background(Capsule().fill(Color.sky.opacity(0.45)))
 
                 Button { metronome.toggle() } label: {
                     Image(systemName: metronome.isPlaying ? "stop.fill" : "play.fill")
                         .font(.title.bold())
                         .frame(width: 160, height: 64)
-                        .background(Capsule().fill(metronome.isPlaying ? Color.red : Color.green))
-                        .foregroundStyle(.black)
+                        .background(Capsule().fill(metronome.isPlaying ? Color.rust : Color.bird))
+                        .foregroundStyle(Color.ground)
                 }
             }
             .buttonStyle(.plain)
             .padding(.bottom, 32)
         }
+        .frame(maxWidth: .infinity)
+        .background(Color.ground)
+        .toolbarBackground(Color.ground, for: .tabBar)
+        .toolbarBackground(.visible, for: .tabBar)
     }
 
     private func stepButton(_ symbol: String, action: @escaping () -> Void) -> some View {
@@ -67,7 +71,7 @@ struct MetronomeView: View {
             Image(systemName: symbol)
                 .font(.title3.bold())
                 .frame(width: 44, height: 44)
-                .background(Circle().fill(Color.white.opacity(0.12)))
+                .background(Circle().fill(Color.sky.opacity(0.45)))
         }
         .buttonStyle(.plain)
     }
